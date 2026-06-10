@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Live Translate · English ⇄ French / Malagasy</title>
+
+  <!-- PWA / Add to Home Screen -->
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#0f1220" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Translate" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <h1>Live Translate</h1>
+      <p class="tagline">Two-way voice interpreter · English ⇄ <span id="tag-other">French</span></p>
+    </header>
+
+    <section class="controls">
+      <div class="lang-picker" role="group" aria-label="Other language">
+        <span class="lang-label">Other language</span>
+        <button class="lang-btn is-active" data-target="french" type="button">
+          <span class="flag">🇫🇷</span> French
+        </button>
+        <button class="lang-btn" data-target="malagasy" type="button">
+          <span class="flag">🇲🇬</span> Malagasy
+        </button>
+      </div>
+      <div class="conv-tools">
+        <button id="open-saved" class="ghost-btn" type="button">📁 Saved</button>
+        <button id="save-conv" class="ghost-btn" type="button">💾 Save</button>
+        <button id="new-conv" class="ghost-btn" type="button">✨ New</button>
+      </div>
+    </section>
+
+    <section class="talk">
+      <button id="talk-english" class="talk-btn talk-btn--english" data-side="english" type="button">
+        <span class="talk-flag">🇬🇧</span>
+        <span class="talk-text">Speak <strong>English</strong></span>
+        <span class="talk-sub">tap &amp; talk</span>
+      </button>
+      <button id="talk-other" class="talk-btn talk-btn--other" data-side="other" type="button">
+        <span class="talk-flag" id="other-flag">🇫🇷</span>
+        <span class="talk-text">Speak <strong id="other-name">French</strong></span>
+        <span class="talk-sub">tap &amp; talk</span>
+      </button>
+    </section>
+
+    <p id="status" class="status" role="status">Pick the other language, then tap a button and speak.</p>
+
+    <section id="conversation" class="conversation" aria-live="polite">
+      <p class="placeholder">Your bilingual conversation will appear here…</p>
+    </section>
+
+    <form id="type-row" class="type-row">
+      <select id="type-side" class="type-side" aria-label="Language you are typing">
+        <option value="english">🇬🇧 EN</option>
+        <option value="other">🇫🇷 FR</option>
+      </select>
+      <input id="type-input" class="type-input" type="text"
+             placeholder="…or type a phrase to translate &amp; speak" autocomplete="off" />
+      <button class="send-btn" type="submit">Send</button>
+    </form>
+  </main>
+
+  <!-- Save conversation modal -->
+  <div id="save-modal" class="modal hidden" role="dialog" aria-modal="true" aria-label="Save conversation">
+    <div class="modal-card">
+      <h2>Save conversation</h2>
+      <label class="field">Title
+        <input id="save-title" type="text" placeholder="e.g. Pharmacy visit" />
+      </label>
+      <label class="field">Category
+        <select id="save-category"></select>
+      </label>
+      <div class="modal-actions">
+        <button id="save-cancel" class="ghost-btn" type="button">Cancel</button>
+        <button id="save-confirm" class="primary-btn" type="button">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Saved conversations modal -->
+  <div id="saved-modal" class="modal hidden" role="dialog" aria-modal="true" aria-label="Saved conversations">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2>Saved conversations</h2>
+        <button id="saved-close" class="ghost-btn" type="button">Close</button>
+      </div>
+      <div class="saved-filter">
+        <select id="saved-filter-cat" aria-label="Filter by category"></select>
+      </div>
+      <div id="saved-list" class="saved-list"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // Register the service worker so the app is installable to the Home Screen.
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/sw.js").catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
