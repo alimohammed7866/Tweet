@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Translate · English → French / Malagasy</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <h1>Live Translate</h1>
+      <p class="tagline">Speak English &middot; see it translated as you talk</p>
+    </header>
+
+    <section class="controls">
+      <div class="lang-picker" role="group" aria-label="Target language">
+        <span class="lang-label">Translate to</span>
+        <button class="lang-btn is-active" data-target="french" type="button">
+          <span class="flag">🇫🇷</span> French
+        </button>
+        <button class="lang-btn" data-target="malagasy" type="button">
+          <span class="flag">🇲🇬</span> Malagasy
+        </button>
+      </div>
+
+      <button id="mic" class="mic-btn" type="button" aria-pressed="false">
+        <span class="mic-dot"></span>
+        <span id="mic-label">Start speaking</span>
+      </button>
+    </section>
+
+    <p id="status" class="status" role="status">Choose a language and press “Start speaking”.</p>
+
+    <section class="panes">
+      <div class="pane">
+        <h2 class="pane-title">English <small>(you)</small></h2>
+        <div id="en" class="pane-body" aria-live="polite">
+          <p class="placeholder">Your words will appear here…</p>
+        </div>
+      </div>
+
+      <div class="pane pane--translation">
+        <h2 class="pane-title"><span id="tr-lang">French</span> <small>(live)</small></h2>
+        <div id="tr" class="pane-body" aria-live="polite">
+          <p class="placeholder">La traduction apparaîtra ici…</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <button id="clear" class="ghost-btn" type="button">Clear</button>
+      <span class="hint">Translation is connotation-aware and updates live, without waiting for you to finish the sentence.</span>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
