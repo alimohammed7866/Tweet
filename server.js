@@ -109,8 +109,14 @@ app.post("/api/translate", async (req, res) => {
   } catch (err) {
     // AbortError just means a newer request superseded this one.
     if (err?.name !== "AbortError") {
-      console.error("translate error:", err?.message || err);
-      res.write(`data: ${JSON.stringify({ error: "translation_failed" })}\n\n`);
+      console.error("translate error:", err?.status, err?.type || err?.name, err?.message || err);
+      const detail = {
+        error: "translation_failed",
+        status: err?.status ?? null,
+        type: err?.type ?? err?.name ?? null,
+        message: err?.message ?? String(err),
+      };
+      res.write(`data: ${JSON.stringify(detail)}\n\n`);
     }
   } finally {
     req.off("close", onClose);
