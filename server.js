@@ -96,9 +96,13 @@ app.post("/api/translate", async (req, res) => {
     messages: [{ role: "user", content: text.trim() }],
   });
 
-  // If the client navigates away or sends a newer request, stop generating.
-  const onClose = () => stream.abort();
-  req.on("close", onClose);
+  // If the client actually disconnects before we finish, stop generating.
+  // Listen on the response (not the request): a small POST body makes `req`
+  // emit "close" as soon as the body is read, which would abort immediately.
+  const onClose = () => {
+    if (!res.writableEnded) stream.abort();
+  };
+  res.on("close", onClose);
 
   try {
     stream.on("text", (delta) => {
@@ -119,7 +123,7 @@ app.post("/api/translate", async (req, res) => {
       res.write(`data: ${JSON.stringify(detail)}\n\n`);
     }
   } finally {
-    req.off("close", onClose);
+    res.off("close", onClose);
     res.end();
   }
 });
