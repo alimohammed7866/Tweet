@@ -1,19 +1,35 @@
-# Live Translate 🎙️ → 🇫🇷 / 🇲🇬
+# Live Translate 🎙️ English ⇄ 🇫🇷 / 🇲🇬
 
-Speak in **English** and watch it translate **live** into **French** or **Malagasy** — without
-waiting for you to finish the sentence, and with attention to local connotations rather than a
-word-for-word gloss.
+A **two-way voice interpreter**. Tap **Speak English** and the other person hears it in
+**French** or **Malagasy**; they tap their language and you hear it back in **English** — out loud,
+through your phone's speaker, with attention to local connotations rather than a word-for-word gloss.
+Conversations can be **saved and classified** for later reference.
 
 ## How it works
 
 | Layer | What it does |
 | --- | --- |
-| **Browser** | The Web Speech API streams *interim* (unfinished) English transcripts as you talk. |
-| **Live translation** | Each in-progress phrase is sent to the backend and translated as you speak. When the phrase finalises, it locks in and a new line begins. |
-| **Backend** (`server.js`) | A small Express server proxies to the Claude API and **streams** the translation back token-by-token over Server-Sent Events. |
-| **Model** | Claude **Opus 4.8**, prompted to act as a real-time interpreter: preserve tone and register, adapt idioms/humour, and pick the phrasing a native speaker in France / Madagascar would actually use. |
+| **Speech in** | The phone's Web Speech API transcribes what you say in the chosen language. |
+| **Translation** | `server.js` proxies to the Claude API and **streams** the translation back token-by-token (SSE). Direction is any pair of English / French / Malagasy. |
+| **Speech out** | The phone's speech synthesis reads the translation aloud; every line has a 🔊 replay button. |
+| **Model** | Claude **Opus 4.8**, prompted as a real-time interpreter: preserve tone and register, adapt idioms/humour, and pick the phrasing a native speaker in France / Madagascar (or a natural English speaker) would actually use. |
+| **Save & classify** | Conversations are stored **on the device** with a title and category (Medical, Travel, Business, …); reopen, filter, replay, or delete them anytime. |
 
 The API key lives only on the server — it is never shipped to the browser.
+
+### Using it
+1. Pick the **other language** (French or Malagasy).
+2. Tap **Speak English** or **Speak French/Malagasy**, talk, then tap again to stop. The translation
+   streams in and is spoken aloud. Hand the phone over; the other person taps their button to reply.
+3. Can't use speech (or Malagasy isn't supported on the device)? **Type** a phrase in the box and pick
+   its language — it still translates and speaks.
+4. **💾 Save** to title + categorise the conversation; **📁 Saved** to browse, filter, reopen, or delete.
+
+### Language support note
+English ⇄ French works fully on phones — recognition *and* spoken audio. **Malagasy** text translation
+always works, but most phone browsers have **no Malagasy voice or speech recognition**, so Malagasy
+audio/dictation may be unavailable on your device (the app says so and offers typing instead). Hooking
+up a paid speech provider can add real Malagasy voice — ask if you want that.
 
 ## Run it
 

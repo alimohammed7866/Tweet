@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Live Translate · English → French / Malagasy</title>
+  <title>Live Translate · English ⇄ French / Malagasy</title>
 
   <!-- PWA / Add to Home Screen -->
   <link rel="manifest" href="manifest.webmanifest" />
@@ -21,12 +21,12 @@
   <main class="app">
     <header class="topbar">
       <h1>Live Translate</h1>
-      <p class="tagline">Speak English &middot; see it translated as you talk</p>
+      <p class="tagline">Two-way voice interpreter · English ⇄ <span id="tag-other">French</span></p>
     </header>
 
     <section class="controls">
-      <div class="lang-picker" role="group" aria-label="Target language">
-        <span class="lang-label">Translate to</span>
+      <div class="lang-picker" role="group" aria-label="Other language">
+        <span class="lang-label">Other language</span>
         <button class="lang-btn is-active" data-target="french" type="button">
           <span class="flag">🇫🇷</span> French
         </button>
@@ -34,36 +34,73 @@
           <span class="flag">🇲🇬</span> Malagasy
         </button>
       </div>
+      <div class="conv-tools">
+        <button id="open-saved" class="ghost-btn" type="button">📁 Saved</button>
+        <button id="save-conv" class="ghost-btn" type="button">💾 Save</button>
+        <button id="new-conv" class="ghost-btn" type="button">✨ New</button>
+      </div>
+    </section>
 
-      <button id="mic" class="mic-btn" type="button" aria-pressed="false">
-        <span class="mic-dot"></span>
-        <span id="mic-label">Start speaking</span>
+    <section class="talk">
+      <button id="talk-english" class="talk-btn talk-btn--english" data-side="english" type="button">
+        <span class="talk-flag">🇬🇧</span>
+        <span class="talk-text">Speak <strong>English</strong></span>
+        <span class="talk-sub">tap &amp; talk</span>
+      </button>
+      <button id="talk-other" class="talk-btn talk-btn--other" data-side="other" type="button">
+        <span class="talk-flag" id="other-flag">🇫🇷</span>
+        <span class="talk-text">Speak <strong id="other-name">French</strong></span>
+        <span class="talk-sub">tap &amp; talk</span>
       </button>
     </section>
 
-    <p id="status" class="status" role="status">Choose a language and press “Start speaking”.</p>
+    <p id="status" class="status" role="status">Pick the other language, then tap a button and speak.</p>
 
-    <section class="panes">
-      <div class="pane">
-        <h2 class="pane-title">English <small>(you)</small></h2>
-        <div id="en" class="pane-body" aria-live="polite">
-          <p class="placeholder">Your words will appear here…</p>
-        </div>
-      </div>
-
-      <div class="pane pane--translation">
-        <h2 class="pane-title"><span id="tr-lang">French</span> <small>(live)</small></h2>
-        <div id="tr" class="pane-body" aria-live="polite">
-          <p class="placeholder">La traduction apparaîtra ici…</p>
-        </div>
-      </div>
+    <section id="conversation" class="conversation" aria-live="polite">
+      <p class="placeholder">Your bilingual conversation will appear here…</p>
     </section>
 
-    <footer class="foot">
-      <button id="clear" class="ghost-btn" type="button">Clear</button>
-      <span class="hint">Translation is connotation-aware and updates live, without waiting for you to finish the sentence.</span>
-    </footer>
+    <form id="type-row" class="type-row">
+      <select id="type-side" class="type-side" aria-label="Language you are typing">
+        <option value="english">🇬🇧 EN</option>
+        <option value="other">🇫🇷 FR</option>
+      </select>
+      <input id="type-input" class="type-input" type="text"
+             placeholder="…or type a phrase to translate &amp; speak" autocomplete="off" />
+      <button class="send-btn" type="submit">Send</button>
+    </form>
   </main>
+
+  <!-- Save conversation modal -->
+  <div id="save-modal" class="modal hidden" role="dialog" aria-modal="true" aria-label="Save conversation">
+    <div class="modal-card">
+      <h2>Save conversation</h2>
+      <label class="field">Title
+        <input id="save-title" type="text" placeholder="e.g. Pharmacy visit" />
+      </label>
+      <label class="field">Category
+        <select id="save-category"></select>
+      </label>
+      <div class="modal-actions">
+        <button id="save-cancel" class="ghost-btn" type="button">Cancel</button>
+        <button id="save-confirm" class="primary-btn" type="button">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Saved conversations modal -->
+  <div id="saved-modal" class="modal hidden" role="dialog" aria-modal="true" aria-label="Saved conversations">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2>Saved conversations</h2>
+        <button id="saved-close" class="ghost-btn" type="button">Close</button>
+      </div>
+      <div class="saved-filter">
+        <select id="saved-filter-cat" aria-label="Filter by category"></select>
+      </div>
+      <div id="saved-list" class="saved-list"></div>
+    </div>
+  </div>
 
   <script src="app.js"></script>
   <script>

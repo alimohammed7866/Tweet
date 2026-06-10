@@ -1,6 +1,6 @@
 // Minimal service worker: caches the app shell so the home-screen app launches
 // instantly. Translation requests (/api/*) always go to the network.
-const CACHE = "live-translate-v1";
+const CACHE = "live-translate-v2";
 const SHELL = [
   "/",
   "/index.html",
