@@ -1,0 +1,13 @@
+# One-click-ish deploy to Render (https://render.com).
+# In the Render dashboard, add your ANTHROPIC_API_KEY as an environment variable
+# (it is intentionally NOT stored in this file).
+services:
+  - type: web
+    name: live-translate
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false   # set this secret in the dashboard

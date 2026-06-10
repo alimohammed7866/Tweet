@@ -28,6 +28,31 @@ Open <http://localhost:3000>, pick **French** or **Malagasy**, press **Start spe
 
 > Setting the key inline also works: `ANTHROPIC_API_KEY=sk-ant-... npm start`
 
+## Put it on your phone's Home Screen
+
+The app is a PWA, so you can install it as a one-tap, full-screen app. It needs a public
+**https://** URL (see *Deploy* below) — `http://localhost` won't work for phone access or the mic.
+
+- **iPhone (Safari):** open the URL → **Share** → **Add to Home Screen**.
+- **Android (Chrome):** open the URL → menu **⋮** → **Install app** / **Add to Home Screen**.
+
+Tap the new icon and it opens full-screen like a native app, ready over Wi-Fi or cellular.
+
+## Deploy (get a public HTTPS URL)
+
+**Render (free):** push this repo to GitHub, then in [Render](https://render.com) create a
+**Web Service** from the repo. `render.yaml` sets the build/start commands; in the dashboard add an
+environment variable **`ANTHROPIC_API_KEY`** with your key. Render gives you an `https://…` URL.
+
+**Docker (any host):**
+
+```bash
+docker build -t live-translate .
+docker run -p 3000:3000 -e ANTHROPIC_API_KEY=sk-ant-... live-translate
+```
+
+The key is supplied to the server as an environment variable on the host — it never ships to the browser.
+
 ## Notes & limitations
 
 - **Live speech recognition** requires the Web Speech API — use **Chrome** or **Edge** (desktop or

@@ -14,5 +14,8 @@
   "dependencies": {
     "@anthropic-ai/sdk": "latest",
     "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5"
   }
 }
